@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}CentrAlign AI · Autonomous Worker{% endblock %}</title>
+<link rel="stylesheet" href="/static/style.css"></head>
+<body><header class="nav"><a class="brand" href="/"><span class="logo">C</span><span>CentrAlign <em>AI</em><small>Autonomous Task Worker</small></span></a>
+<nav><a href="/">Control center</a><a href="/workspace/invoices">Invoice inbox</a><a href="/workspace/ledger">Accounts payable</a><a href="/workspace/tickets">Support inbox</a><a href="/workspace/cases">Support cases</a></nav>
+<div class="pill"><i></i> SANDBOX ENVIRONMENT</div></header>
+<main class="shell">{% block content %}{% endblock %}</main>
+<footer>Local sandbox · No real emails, payments, banking systems, or third-party credentials.</footer>
+{% block scripts %}{% endblock %}
+</body></html>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Create support case · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">INTERNAL SUPPORT SYSTEM</div><h1>Create a support case</h1><p>Source identity, category, priority and routing are validated on the server.</p></div>
+<section class="panel form-panel">{% if error %}<div class="form-error" role="alert">{{ error }}</div>{% endif %}
+<form class="ledger-form" action="/workspace/cases/new" method="post">
+<label for="{{ 'changed-' if ui_variant else '' }}source-ticket-id">Source ticket ID</label><input id="{{ 'changed-' if ui_variant else '' }}source-ticket-id" name="source_ticket_id" value="{{ values.get('source_ticket_id','') }}" required type="number">
+<label for="{{ 'changed-' if ui_variant else '' }}ticket-number">Ticket number</label><input id="{{ 'changed-' if ui_variant else '' }}ticket-number" name="number" value="{{ values.get('number','') }}" required>
+<label for="{{ 'changed-' if ui_variant else '' }}ticket-requester">Requester</label><input id="{{ 'changed-' if ui_variant else '' }}ticket-requester" name="requester" value="{{ values.get('requester','') }}" required>
+<label for="{{ 'changed-' if ui_variant else '' }}ticket-subject">Subject</label><input id="{{ 'changed-' if ui_variant else '' }}ticket-subject" name="subject" value="{{ values.get('subject','') }}" required>
+<label for="{{ 'changed-' if ui_variant else '' }}case-category">Category</label><select id="{{ 'changed-' if ui_variant else '' }}case-category" name="category"><option value="billing">billing</option><option value="access">access</option><option value="technical">technical</option><option value="general">general</option></select>
+<label for="{{ 'changed-' if ui_variant else '' }}case-priority">Priority</label><select id="{{ 'changed-' if ui_variant else '' }}case-priority" name="priority"><option value="normal">normal</option><option value="high">high</option></select>
+<label for="{{ 'changed-' if ui_variant else '' }}assigned-team">Assigned team</label><select id="{{ 'changed-' if ui_variant else '' }}assigned-team" name="assigned_team"><option>Finance Support</option><option>Identity Support</option><option>Engineering Support</option><option>Customer Operations</option></select>
+<label for="{{ 'changed-' if ui_variant else '' }}case-task-id">Task ID</label><input id="{{ 'changed-' if ui_variant else '' }}case-task-id" name="task_id" value="{{ values.get('task_id','') }}">
+<button class="primary" id="{{ 'changed-' if ui_variant else '' }}submit-case" type="submit">Create assigned case</button></form></section>{% endblock %}

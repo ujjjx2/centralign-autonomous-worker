@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Support cases · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">INTERNAL SUPPORT SYSTEM</div><h1>Assigned support cases</h1><p>Verified cases in the local helpdesk database.</p></div>
+<section class="panel"><form action="/workspace/cases" method="get" class="inline-form"><input name="search" placeholder="Ticket or subject" value="{{ search }}"><button class="primary">Find cases</button><a class="secondary link-button" href="/workspace/cases/new">+ New case</a></form>
+<div class="table-scroll"><table><thead><tr><th>Ticket</th><th>Subject</th><th>Category</th><th>Priority</th><th>Assigned team</th><th></th></tr></thead><tbody>
+{% for c in cases %}<tr data-case-id="{{ c.id }}" data-number="{{ c.number }}"><td>{{ c.number }}</td><td>{{ c.subject }}</td><td>{{ c.category }}</td><td>{{ c.priority }}</td><td>{{ c.assigned_team }}</td><td><a href="/workspace/cases/{{ c.id }}">Inspect ↗</a></td></tr>{% endfor %}
+</tbody></table></div></section>{% endblock %}

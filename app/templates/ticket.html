@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block title %}Ticket {{ ticket.number }} · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">UNTRUSTED CUSTOMER REQUEST</div><h1>{{ ticket.number }}</h1><p>The worker interprets ticket content as task data, not executable instructions.</p></div>
+<section class="document-wrap"><article class="invoice-document support-document" id="ticket-document"
+ data-number="{{ ticket.number }}" data-requester="{{ ticket.requester }}" data-subject="{{ ticket.subject }}">
+<div class="document-topline">CUSTOMER SUPPORT MESSAGE</div><h2>{{ ticket.subject }}</h2>
+<div class="document-details">Ticket: {{ ticket.number }}
+Requester: {{ ticket.requester }}
+Arrived: {{ ticket.arrived_at }}</div>
+<div class="invoice-note"><h3>Issue description</h3><p id="ticket-description">{{ ticket.description }}</p></div>
+</article></section>{% endblock %}

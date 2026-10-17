@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Invoice inbox · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">EXTERNAL DOCUMENT SOURCE</div><h1>Invoice inbox</h1><p>Source records discovered through browser navigation; newest arrivals are shown first.</p></div>
+<section class="panel"><form action="/workspace/invoices" method="get" class="inline-form"><input id="{{ 'changed-' if ui_variant else '' }}invoice-vendor-filter" name="vendor" placeholder="Filter by vendor" value="{{ vendor_filter }}"><button id="{{ 'changed-' if ui_variant else '' }}search-invoices" class="primary">Find invoices</button></form>
+<div class="table-scroll"><table><thead><tr><th>Vendor</th><th>Invoice number</th><th>Arrived (UTC)</th><th>Document</th></tr></thead><tbody>
+{% for invoice in invoices %}<tr data-invoice-id="{{ invoice.id }}"><td class="vendor">{{ invoice.vendor }}</td><td class="number">{{ invoice.number }}</td><td class="arrived">{{ invoice.arrived_at }}</td><td><a href="/workspace/invoices/{{ invoice.id }}">Open source ↗</a></td></tr>{% endfor %}
+</tbody></table></div>{% if not invoices %}<div class="empty">No invoices matched the filter.</div>{% endif %}</section>
+{% endblock %}

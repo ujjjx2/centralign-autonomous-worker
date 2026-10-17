@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Saved support case · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">INTERNAL SUPPORT SYSTEM / READ-BACK</div><h1>Verified support case</h1><p>Actual saved data read back after form submission.</p></div>
+<section class="panel detail-panel"><div class="success-line">✓ Support case created</div>
+<dl id="verified-support-case" data-number="{{ case.number }}" data-requester="{{ case.requester }}" data-subject="{{ case.subject }}" data-category="{{ case.category }}" data-priority="{{ case.priority }}" data-assigned-team="{{ case.assigned_team }}">
+<dt>Ticket</dt><dd>{{ case.number }}</dd><dt>Requester</dt><dd>{{ case.requester }}</dd><dt>Subject</dt><dd>{{ case.subject }}</dd><dt>Category</dt><dd>{{ case.category }}</dd><dt>Priority</dt><dd>{{ case.priority }}</dd><dt>Team</dt><dd>{{ case.assigned_team }}</dd><dt>Status</dt><dd>{{ case.status }}</dd><dt>Task ID</dt><dd>{{ case.task_id }}</dd></dl>
+<a href="/workspace/cases" class="small-link">← All support cases</a></section>{% endblock %}

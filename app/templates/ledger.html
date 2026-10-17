@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Accounts payable · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">INTERNAL COMPANY APPLICATION</div><h1>Accounts payable</h1><p>Persisted ledger records in the simulated internal accounting system.</p></div>
+<section class="panel"><form action="/workspace/ledger" method="get" class="inline-form"><input name="search" placeholder="Search vendor or invoice number" value="{{ search }}"><button class="primary">Search ledger</button><a href="/workspace/ledger/new" class="secondary link-button">+ New entry</a></form>
+<div class="table-scroll"><table><thead><tr><th>Vendor</th><th>Reference</th><th>Amount</th><th>Due date</th><th>Record</th></tr></thead><tbody>
+{% for e in entries %}<tr data-entry-id="{{ e.id }}" data-vendor="{{ e.vendor }}" data-number="{{ e.number }}"><td>{{ e.vendor }}</td><td>{{ e.number }}</td><td>${{ '%.2f'|format(e.amount_cents / 100) }}</td><td>{{ e.due_date }}</td><td><a href="/workspace/ledger/{{ e.id }}">Inspect ↗</a></td></tr>{% endfor %}
+</tbody></table></div>{% if not entries %}<div class="empty">No matching records in the ledger.</div>{% endif %}</section>
+{% endblock %}

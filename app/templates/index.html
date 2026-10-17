@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block content %}
+<section class="hero"><div class="eyebrow">COMPANY OPERATIONS / AI EMPLOYEE #01</div>
+<h1>From intent to <span>verified work.</span></h1>
+<p>A goal-driven worker that decomposes requests with local Gemma, selects actions from observations, handles alternatives and verifies saved results. Every action leaves an audit trail.</p>
+<div class="hero-pills"><span>● Gemma 4 E2B · Ollama</span><span>● Browser execution</span><span>● Human approvals</span><span>● Idempotent writes</span><span>● Evidence artifacts</span><span>● Two workflows</span></div></section>
+<div class="layout"><div class="left-pane">
+<section class="panel"><div class="section-head"><h2>Assign a task</h2><span class="tag">NATURAL LANGUAGE</span></div>
+<form id="task-form"><label for="instruction">What should your AI worker accomplish?</label>
+<textarea id="instruction" minlength="8" maxlength="600" required spellcheck="false">Find the latest invoice from Northstar Labs, extract the amount and due date, and record it in accounts payable.</textarea>
+<div class="button-row"><button class="primary" id="start-task" type="submit">▶ Run autonomous task</button><span id="submit-message"></span></div></form>
+<div class="examples"><div class="muted-title">TRY A SCENARIO</div>
+<button data-example="Find the latest invoice from Northstar Labs and record it in accounts payable.">Standard invoice</button>
+<button data-example="Record the latest invoice from Acme Services in accounts payable.">Approval required</button>
+<button data-example="Process invoice BP-774 from BluePeak Cloud.">Untrusted document</button>
+<button data-example="Check whether invoice HO-88 from Harbor Office has already been recorded.">Read-only check</button>
+<button data-example="Record the latest invoice.">Needs clarification</button>
+<button data-example="Triage ticket TKT-402 and assign it to the right team.">Support ticket triage</button>
+<button data-example="Triage the latest customer support ticket.">Critical incident escalation</button></div></section>
+<section class="panel"><div class="section-head"><h2>Agent execution trace</h2><span id="task-state" class="state" aria-live="polite">NO TASK SELECTED</span></div>
+<div id="task-summary" class="task-summary">Choose a scenario, then run a task to inspect each decision and observation.</div>
+<div id="task-actions"></div><div id="task-plan" class="task-plan"></div><div id="trace" class="trace"></div></section>
+</div><div class="right-pane">
+<section class="panel compact"><div class="section-head"><h2>Local model</h2><a class="small-link" href="/api/model">Details ↗</a></div>
+{% if model_info.available %}
+<p class="smalltext"><strong>Local model installed: {{ model_info.model }}</strong> via Ollama at {{ model_info.endpoint }}. No cloud API key.</p>
+{% else %}
+<p class="smalltext">Gemma unavailable: {{ model_info.reason }}. Tasks require local Ollama in Gemma mode. Start Ollama and pull <code>gemma4:e2b</code>.</p>
+{% endif %}
+</section>
+<section class="panel compact"><div class="section-head"><h2>Sandbox operations</h2></div>
+<div class="stat-grid"><div><span class="stat">{{ vendors|length }}</span><small>Vendors</small></div><div><span class="stat" id="recorded-invoices-count">{{ ledger|length }}</span><small>Recorded invoices</small></div><div><span class="stat">${{ '%.0f'|format(threshold) }}</span><small>Approval threshold</small></div><div><span class="stat" id="support-cases-count">{{ cases|length }}</span><small>Support cases</small></div></div>
+<p class="smalltext">Inject a single, recoverable accounting-service outage to watch the agent adapt instead of stopping.</p>
+<button class="secondary" id="inject-failure">⚡ Fail next ledger write once</button>
+<button class="secondary" id="inject-case-failure">⚡ Fail next support write once</button><p id="fault-feedback" class="smalltext"></p></section>
+<section class="panel"><div class="section-head"><h2>Recent task runs</h2><a class="small-link" href="/api/tasks">JSON ↗</a></div>
+<div id="recent-tasks" class="recent-tasks">{% for task in tasks %}<button class="recent-task" data-task-id="{{ task.id }}"><span class="mini-state">{{ task.status }}</span><span>{{ task.instruction[:70] }}</span></button>{% endfor %}</div></section>
+<section class="panel compact"><div class="section-head"><h2>How it works</h2></div><div class="flow-steps">
+<div><b>01</b><span><strong>Understand</strong><small>Choose workflow and determine the desired business outcome.</small></span></div>
+<div><b>02</b><span><strong>Act + observe</strong><small>Operate HTML inboxes, extract facts and fill internal forms.</small></span></div>
+<div><b>03</b><span><strong>Recover</strong><small>Use alternate searches, form refresh, duplicate checks and human review.</small></span></div>
+<div><b>04</b><span><strong>Verify</strong><small>Independent read-back and verification evidence.</small></span></div>
+</div></section></div></div>
+{% endblock %}{% block scripts %}<script src="/static/app.js"></script>{% endblock %}

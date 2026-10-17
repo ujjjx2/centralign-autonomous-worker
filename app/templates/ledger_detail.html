@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Saved invoice · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">INTERNAL COMPANY APPLICATION / READ-BACK</div><h1>Recorded invoice</h1><p>Independent post-write verification reads these persisted fields.</p></div>
+<section class="panel detail-panel"><div class="success-line">✓ Saved in accounts payable</div>
+<dl id="verified-ledger-entry" data-vendor="{{ entry.vendor }}" data-number="{{ entry.number }}" data-amount-cents="{{ entry.amount_cents }}" data-due-date="{{ entry.due_date }}" data-currency="{{ entry.currency }}">
+<dt>Vendor</dt><dd>{{ entry.vendor }}</dd><dt>Invoice reference</dt><dd>{{ entry.number }}</dd>
+<dt>Amount</dt><dd>${{ '%.2f'|format(entry.amount_cents/100) }} {{ entry.currency }}</dd>
+<dt>Due date</dt><dd>{{ entry.due_date }}</dd><dt>Source document ID</dt><dd>{{ entry.source_invoice_id }}</dd>
+<dt>Recorded at</dt><dd>{{ entry.created_at }}</dd><dt>Task ID</dt><dd>{{ entry.task_id or 'Manual' }}</dd></dl>
+<a class="small-link" href="/workspace/ledger">← All ledger entries</a></section>{% endblock %}

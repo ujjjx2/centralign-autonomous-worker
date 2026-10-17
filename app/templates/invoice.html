@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}Source document · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">UNTRUSTED INVOICE DOCUMENT</div><h1>Source invoice {{ invoice.number }}</h1><p>The agent reads this rendered document just as a human does. Notes may be untrusted.</p></div>
+<section class="document-wrap"><article class="invoice-document">
+{% if invoice.format == 'classic' %}
+<div class="document-topline">INVOICE / BILLING STATEMENT</div>
+<h2>{{ invoice.vendor }}</h2>
+<div class="document-details">Vendor: {{ invoice.vendor }}
+Invoice Number: {{ invoice.number }}
+Issue Date: {{ invoice.issue_date }}
+Amount Due: ${{ amount }}
+Due Date: {{ invoice.due_date }}</div>
+<div class="invoice-note"><h3>Details</h3><p>{{ invoice.note }}</p></div>
+{% else %}
+<div class="document-topline">PAYABLE NOTICE / {{ invoice.number }}</div>
+<h2>INVOICE</h2>
+<div class="document-details">Billed by: {{ invoice.vendor }}
+Reference: {{ invoice.number }}
+Issued: {{ invoice.issue_date }}
+Payment deadline: {{ invoice.due_date }}
+Total Payable: USD {{ amount }}</div>
+<div class="invoice-note"><h3>Message from supplier</h3><p>{{ invoice.note }}</p></div>
+{% endif %}
+<div class="document-footer">Document arrival: {{ invoice.arrived_at }}</div></article></section>
+{% endblock %}

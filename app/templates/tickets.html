@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Support inbox · CentrAlign{% endblock %}{% block content %}
+<div class="page-title"><div class="eyebrow">EXTERNAL SUPPORT REQUESTS</div><h1>Customer support inbox</h1><p>Incoming support tickets, waiting for autonomous triage.</p></div>
+<section class="panel"><form action="/workspace/tickets" method="get" class="inline-form"><input id="{{ 'changed-' if ui_variant else '' }}ticket-search" name="search" value="{{ search }}" placeholder="Search ticket or subject"><button id="{{ 'changed-' if ui_variant else '' }}search-tickets" class="primary">Search tickets</button></form>
+<div class="table-scroll"><table><thead><tr><th>Ticket</th><th>Subject</th><th>Requester</th><th>Arrival</th><th></th></tr></thead><tbody>
+{% for t in tickets %}<tr data-ticket-id="{{ t.id }}"><td class="number">{{ t.number }}</td><td class="subject">{{ t.subject }}</td><td class="requester">{{ t.requester }}</td><td class="arrived">{{ t.arrived_at }}</td><td><a href="/workspace/tickets/{{ t.id }}">Read ↗</a></td></tr>{% endfor %}
+</tbody></table></div></section>{% endblock %}
