@@ -7,6 +7,7 @@ by Chromium itself and stored under the task's evidence directory.
 from __future__ import annotations
 import os
 import re
+import shutil
 import time
 from pathlib import Path
 from urllib.parse import quote, urlparse, urljoin
@@ -83,14 +84,23 @@ class VisualBrowserTools:
             except Exception:
                 pass
         if ctx is not None:
-            try:ctx.tracing.stop(path=str(self.artifacts/f'playwright-trace-{self.restarts}.zip'))
-            except Exception:pass
+            # Keep numbered traces across bounded browser restarts while also
+            # publishing the canonical name expected by tests and /browser-trace.
+            # The canonical copy is overwritten with the latest saved session.
+            trace_path = self.artifacts / f'playwright-trace-{self.restarts}.zip'
+            try:
+                ctx.tracing.stop(path=str(trace_path))
+                if trace_path.is_file() and trace_path.stat().st_size > 0:
+                    shutil.copy2(trace_path, self.artifacts / 'playwright-trace.zip')
+            except Exception:
+                # A crashed browser may prevent trace finalization; never mask
+                # the original browser error while cleaning up.
+                pass
             video=page.video if page is not None else None
             try:ctx.close()
             except Exception:pass
             if video is not None:
                 try:
-                    import shutil
                     video_path=video.path()
                     shutil.copy2(video_path,self.artifacts/f'browser-recording-{self.restarts}.webm')
                     if self.restarts==0:

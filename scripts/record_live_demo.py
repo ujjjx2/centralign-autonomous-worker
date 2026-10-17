@@ -54,6 +54,8 @@ def human_click(page,selector):
 def main():
     cli=argparse.ArgumentParser(description='Record live browser automation; no fake cursor')
     cli.add_argument('--headful',action='store_true',help='Show both dashboard and worker Chromium windows')
+    cli.add_argument('--task-timeout',type=int,default=360,help='Max seconds for each live task (Gemma may need time to load)')
+    cli.add_argument('--strict',action='store_true',help='Require accepted Gemma decisions, approval pause, recovery and verified readback')
     cli.add_argument('--output',default='docs/CentrAlign_v6_REAL_BROWSER_DEMO.mp4')
     cli.add_argument('--chromium-executable',default=os.getenv('BROWSER_EXECUTABLE',''))
     cli.add_argument('--no-shifted-ui',action='store_true',help='Use standard form IDs instead of changed IDs')
@@ -119,16 +121,40 @@ def main():
                 found=next((t for t in tasks if t['id'].startswith(task_id)),None)
                 if not found:raise RuntimeError('Submitted task ID missing')
                 task_id=found['id'];task_ids.append(task_id)
-                state=poll(client,task_id,{'completed','failed','awaiting_approval','needs_input'})
+                state=poll(client,task_id,{'completed','failed','awaiting_approval','needs_input'},timeout=args.task_timeout)
+                paused_for_approval=(state['status']=='awaiting_approval')
                 if state['status']=='awaiting_approval':
                     page.wait_for_selector('#task-actions button',timeout=12000)
                     human_click(page,'#task-actions button.primary')
-                    state=poll(client,task_id,{'completed','failed'})
+                    state=poll(client,task_id,{'completed','failed'},timeout=args.task_timeout)
                 if state['status']!='completed':
                     raise RuntimeError(f'{title} failed: {state["status"]} {state.get("error")}')
+                events=state['events']
+                accepted_plan=any(e.get('tool')=='gemma_task_decomposition' and
+                                  e.get('detail',{}).get('source')=='gemma_validated' for e in events)
+                accepted_choice=any(e.get('detail',{}).get('decision_mode')=='gemma4_e2b'
+                                    for e in events)
+                verified=bool(state.get('report',{}).get('verification',{}).get('matched'))
+                recovery=any(e.get('kind')=='retry' for e in events)
+                if args.strict:
+                    if not accepted_plan or not accepted_choice:
+                        raise RuntimeError(f'{title}: Gemma did not produce an accepted plan and decision')
+                    if not verified:
+                        raise RuntimeError(f'{title}: independent verification did not match')
+                    if title.startswith('Recover') and not recovery:
+                        raise RuntimeError(f'{title}: expected injected write failure did not produce retry')
+                    if title=='Approval gate' and not paused_for_approval:
+                        raise RuntimeError(f'{title}: workflow did not stop for human approval')
+                    if title=='Ticket triage' and state.get('report',{}).get('outcome')!='triaged_and_verified':
+                        raise RuntimeError(f'{title}: support case was not triaged and verified')
                 completed.append({'title':title,'task_id':task_id,
                                   'outcome':state['report']['outcome'],
-                                  'browser_steps':sum(1 for e in state['events'] if e['kind']=='browser_step')})
+                                  'browser_steps':sum(1 for e in events if e['kind']=='browser_step'),
+                                  'gemma_validated_plan':accepted_plan,
+                                  'gemma_validated_action':accepted_choice,
+                                  'fresh_readback_matched':verified,
+                                  'retry_seen':recovery,
+                                  'approval_pause_seen':paused_for_approval})
                 time.sleep(1.0)
             dashboard_video=page.video
             context.close()

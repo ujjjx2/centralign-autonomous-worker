@@ -11,6 +11,12 @@
 | Actual execution | Local HTML forms and SQLite persistent writes, browser automation adapter | End-to-end HTTP integration; browser component tests |
 | Verified completion | Fresh target readback with exact field comparisons | End-to-end tests and evidence artifacts |
 
+## Most recent verification available in this package
+
+On 17 October 2026, the v6.2 archive was tested in an independent Linux container. **56 tests passed, 2 were skipped, 0 assertions failed**, according to pytest's completed summary (`56 passed, 2 skipped in 34.59s`). Skips were the browser-video tests because the container lacked Playwright's FFmpeg and Chromium bundles. This verifies the isolated test suite, **not** the Apple M4 runtime, real model behavior, or all four live browser scenarios.
+
+The user's prior M4 trace separately showed an actual successful Chromium task with `gemma_validated` decomposition, `gemma4_e2b` accepted action choices and a `fresh_browser_readback` verification match for Northstar Labs. The high-value approval, injected-failure recovery and support-ticket browser flows still require fresh Mac evidence; run `scripts/final_submission_check.sh` and inspect its logs and the MP4 before claiming these are validated on the physical computer.
+
 ## What these results **do not** mean
 
 - Mock-Ollama responses validate wiring and policy restrictions; they do not establish real Gemma 4 E2B reasoning quality.

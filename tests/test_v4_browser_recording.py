@@ -67,4 +67,5 @@ def test_v4_adapter_saves_real_browser_recording(tmp_path,monkeypatch):
     artifact=tmp_path/'test'
     assert (artifact/'browser-recording.webm').stat().st_size>500
     assert (artifact/'playwright-trace.zip').stat().st_size>500
+    assert (artifact/'playwright-trace-0.zip').stat().st_size>500
     assert list(artifact.glob('*.png'))

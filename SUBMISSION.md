@@ -1,24 +1,25 @@
-# CentrAlign AI — Submission guide
+# CentrAlign AI v6.2 — Final submission checklist
 
-**Project:** Local Gemma 4 E2B autonomous task worker (v6).
+**Repository:** https://github.com/ujjjx2/centralign-autonomous-worker
 
-The submission includes FastAPI sandbox applications, a Gemma-generated validated task planner with observation-based decision and alternative recovery, Playwright DOM control, SQLite task memory, an Ollama Gemma 4 E2B adapter, constrained JSON decisions, authorization rules, automated tests, and README/architecture/evaluation documents.
+**Submission readiness:** Core invoice+Gemma+Chromium run verified in a user-provided execution trace. A separate source-only pytest run passed 56 tests, with 2 media tests skipped. Real Gemma and Chromium approval/retry/support demonstrations are **not yet confirmed on the Mac** and require the live preflight below. No public demo-video link has been supplied yet.
 
-## Before submitting
+## Perform these checks on the Apple M4
 
-1. Install the project and Ollama `gemma4:e2b` on your MacBook Pro M4 using `README.md`.
-2. Run `python scripts/check_mac_m4.py` and confirm real model inference and Chromium startup.
-3. Run `python -m pytest -q` and `python -m scripts.evaluate`.
-4. Record **live** browser automation: `python scripts/record_live_demo.py --headful`.
-5. Inspect recorded video for real cursor clicks, browser navigation and verification.
-6. Push source to GitHub; do not commit downloaded model weights or `.env` secrets.
-7. Host the demo video and submit GitHub/video links.
+1. In the existing project folder, activate `.venv`; launch Ollama and ensure `gemma4:e2b` is installed. Install Chromium and FFmpeg if needed.
+2. Close any running CentrAlign server. Run `OLLAMA_TIMEOUT=240 bash scripts/final_submission_check.sh`.
+3. Require all checks to finish successfully. Inspect the full MP4 at `docs/CentrAlign_v6_REAL_BROWSER_DEMO.mp4` and the generated `data/submission_checks/` evidence logs.
+4. Confirm the isolated video includes a standard invoice, injected HTTP 503 recovery, support-ticket triage and a human approval pause/resumption; check the `run_summary.json` for matching flags.
+5. Host the genuine video on a shareable service, and **insert the actual URL** into the root README; verify viewer permissions without an authenticated session.
+6. `git add` only the source/docs/scripts and commit/push to the **same** existing GitHub repository. Do not upload `.venv`, model weights, `.env`, SQLite databases or generated video unless a platform explicitly requires it.
+7. Submit the repository URL and real video URL via the employer's indicated channel before the deadline specified in the assignment.
 
-## Disclosures
+## Honest technical disclosures
 
-- **Model:** Google's pretrained Gemma 4 E2B, downloaded and run locally with Ollama; no self-trained model or cloud API key.
-- **Scope:** Two simulated enterprise workflows, not unrestricted operating-system control.
-- **Tests:** Automated CI-style integration tests use a fake Ollama interface, not genuine Gemma outputs. Live model performance and browser automation require verification on the target Mac.
-- **External dependencies:** Python, FastAPI, Playwright Chromium, SQLite, httpx and Ollama with Gemma 4 E2B weights.
-- **Known limitations:** Small model, sandbox data only, two workflows, no production authentication or scalable task queue.
-- **Future work:** Broader workflow discovery, more evaluation cases, recovery from unknown UI redesigns, and production authorization.
+- The model is Google's pretrained Gemma 4 E2B running locally through Ollama. It is not self-trained and is not a hosted API.
+- The project is a bounded agent for two simulated enterprise workflows; arbitrary computer or external-site tasks are not supported.
+- Decisions are suggested by Gemma within Python-enforced allowlists, prerequisites, approval policy, idempotency and independent verification. The system discloses deterministic fallbacks in traces.
+- Automated tests use deterministic model stubs/fake Ollama; only the Mac live checks exercise the actual locally installed Gemma.
+- The sandbox is not a production deployment and does not process real money, customer accounts or private business documents.
+
+**Do not claim the video is published until it has been recorded, watched, uploaded and the public link verified.**
